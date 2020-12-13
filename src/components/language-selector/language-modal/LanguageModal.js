@@ -30,12 +30,12 @@ const LanguageModal = ({ t, tReady, onLeave, link, className, ...props }) => {
         </div>
         <p className='lh-copy charcoal f6'>
           {t('languageModal.translationProjectIntro')}<br/>
-          <a href="https://www.transifex.com/ipfs/public/" rel="noopener noreferrer" target="_blank" class="link blue">{t('languageModal.translationProjectLink')}</a>
+          <a href="https://www.transifex.com/ipfs/public/" rel="noopener noreferrer" target="_blank" className="link blue">{t('languageModal.translationProjectLink')}</a>
         </p>
       </ModalBody>
 
       <ModalActions>
-        <Button className='ma2 tc' bg='bg-gray' onClick={onLeave}>{t('actions.close')}</Button>
+        <Button className='ma2 tc' bg='bg-gray' onClick={onLeave}>{t('app:actions.close')}</Button>
       </ModalActions>
     </Modal>
   )

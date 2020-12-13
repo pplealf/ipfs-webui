@@ -84,6 +84,19 @@ To reset your config back to the default configuration, run the following comman
 
 You might also like to copy the `~/.ipfs/config` file somewhere with a useful name so you can use `ipfs config replace <file>` to switch your node between default and dev mode easily.
 
+## Running with Docker
+
+If you need to run IPFS in a Docker container, you can still have Web UI available by exposing both the Gateway and Web UI ports.
+
+Using the default ports:
+
+```sh
+docker pull ipfs/go-ipfs
+docker run -p 8080:8080 -p 5001:5001 -it ipfs/go-ipfs
+```
+
+See the [go-ipfs page](https://hub.docker.com/r/ipfs/go-ipfs) on Docker Hub to get started using IPFS with Docker.
+
 ## Build
 
 To create an optimized static build of the app, output to the `build` directory:
@@ -139,8 +152,17 @@ CI setup of ipfs-webui repo runs tests against both JS and GO implementations:
 > E2E_IPFSD_TYPE=js npm run test:e2e
 ```
 
+##### Overriding versions
+
 It is possible to test against arbitrary versions by tweaking `ipfs` (js-ipfs)
- and `go-ipfs-dep` (go-ipfs) in `devDependencies` section of `package.json` and applying the change via `npm i`
+ and `go-ipfs` in `devDependencies` section of `package.json` and applying the change via `npm i`
+ 
+One can also override the binary used in e2e tests by providing a path to an alternative one via `IPFS_GO_EXEC` (or `IPFS_JS_EXEC`):
+
+```sh
+> IPFS_GO_EXEC=$GOPATH/bin/ipfs  npm run test:e2e
+> E2E_IPFSD_TYPE=js IPFS_JS_EXEC=/path/to/jsipfs  npm run test:e2e
+```
 
 #### `E2E_API_URL`
 
@@ -229,9 +251,11 @@ To inspect the built bundle for bundled modules and their size, first `build` th
 
 ## Translations
 
+One can permanently switch to a different locale via _Settings_ or temporarily via `?lng=<lang-code>` URL parameter.
+
 The translations are stored on [./public/locales](./public/locales) and the English version is the source of truth. We use Transifex to help us translate WebUI to another languages.
 
-**If you're interested in contributing a translation**, go to [our page on Transifex](https://www.transifex.com/ipfs/ipfs-webui/translate/), create an account, pick a language and start translating.
+**If you're interested in contributing a translation**, go to [our page on Transifex](https://www.transifex.com/ipfs/ipfs-webui/translate/), create an account, pick a language and start translating. Be sure to change your notification settings to be notified when translation sources change.
 
 You can read more on how we use Transifex and i18next in this app at [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md)
 
@@ -245,9 +269,8 @@ You can read more on how we use Transifex and i18next in this app at [`docs/LOCA
 1. Wait for master to [build on CI](https://circleci.com/gh/ipfs-shipyard/ipfs-webui), and grab the CID produced from the tagged commit
 1. Add release notes to https://github.com/ipfs-shipyard/ipfs-webui/releases, use the tag and CID you created 
 1. Update the CID at projects that use ipfs-webui by submitting PR against below lines:
-   - js-ipfs: https://github.com/ipfs/js-ipfs/blob/master/packages/ipfs/src/http/api/routes/webui.js#L8
+   - js-ipfs: https://github.com/ipfs/js-ipfs/blob/master/packages/ipfs-http-server/src/api/routes/webui.js#L8
    - go-ipfs: https://github.com/ipfs/go-ipfs/blob/master/core/corehttp/webui.go#L4
-   - ipfs-companion: https://github.com/ipfs-shipyard/ipfs-companion/blob/master/add-on/src/lib/precache.js#L15
    - ipfs-desktop: https://github.com/ipfs-shipyard/ipfs-desktop/blob/master/package.json#L18
 
 ## Contribute
